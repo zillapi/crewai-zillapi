@@ -71,7 +71,31 @@ _SERVICE_UNAVAILABLE = (
 
 _GENERIC_CLIENT_ERROR = "The request was rejected. Check the tool arguments and retry."
 
-_CODE_PATTERN = re.compile(r"^[a-z][a-z0-9_]{0,39}$")
+# Codes are an ALLOWLIST, not a pattern match, for the same reason messages are.
+# A pattern match is still pass-through: any snake_case token the API sends would
+# be relayed verbatim, so a code naming a service internal would reach the caller
+# through the one field that was not table-driven. Anything outside this set
+# degrades to http_<status>, which is still actionable. Drawn from the codes the
+# Zillapi gateway actually emits, so every member is ours by construction.
+_KNOWN_CODES = frozenset(
+    {
+        # auth and account
+        "invalid_api_key", "missing_api_key", "invalid_credentials",
+        "missing_credentials", "out_of_credits", "insufficient_credits",
+        "account_suspended", "account_not_found", "no_account",
+        # request validation
+        "missing_input", "empty_input", "invalid_body", "invalid_json",
+        "invalid_filters", "invalid_search_url", "invalid_bbox", "invalid_status",
+        "invalid_format", "invalid_zpid", "invalid_url", "invalid_address",
+        "missing_address", "missing_url", "invalid_extract_units", "invalid_job_id",
+        # lookups
+        "not_found", "property_not_found", "job_not_found", "dataset_not_found",
+        # async jobs
+        "job_not_ready", "dataset_not_ready",
+        # throttling
+        "rate_limited", "too_many",
+    }
+)
 
 _MESSAGE_BY_CODE = {
     "invalid_filters": (
@@ -116,7 +140,7 @@ def _safe_code(raw: Any, status: int) -> str:
     """Return a machine matchable error code that cannot carry service internals."""
     if status >= 500:
         return "service_unavailable"
-    if isinstance(raw, str) and _CODE_PATTERN.match(raw):
+    if isinstance(raw, str) and raw in _KNOWN_CODES:
         return raw
     return f"http_{status}"
 

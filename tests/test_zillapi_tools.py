@@ -221,6 +221,35 @@ def test_malformed_error_code_is_replaced(fake_requests):
     assert _decode(raw)["error"]["code"] == "http_400"
 
 
+@pytest.mark.parametrize(
+    "status,code",
+    [
+        (400, "upstreamname_timeout"),
+        (400, "widgetfetcher_failed"),
+        (429, "upstreamname_rate_limited"),
+        (404, "fetcher_no_result"),
+    ],
+)
+def test_unrecognised_code_is_not_relayed_even_when_well_formed(
+    fake_requests, status, code
+):
+    """A well formed snake_case code is still pass-through if it is only pattern
+    matched. Codes must be allowlisted, exactly like messages, or an unfamiliar
+    token reaches the caller through the one field that was not table driven."""
+    fake_requests(lambda *a, **k: _FakeResponse(status, {"error": {"code": code}}))
+    raw = zt._request("GET", "/v1/me")
+    assert code not in raw
+    assert _decode(raw)["error"]["code"] == f"http_{status}"
+
+
+@pytest.mark.parametrize("code", ["invalid_filters", "out_of_credits", "job_not_ready"])
+def test_recognised_codes_still_pass_through(fake_requests, code):
+    """The allowlist must not be so tight that real codes stop reaching callers.
+    Without this, an over-tight allowlist would look identical to a working one."""
+    fake_requests(lambda *a, **k: _FakeResponse(400, {"error": {"code": code}}))
+    assert _decode(zt._request("GET", "/v1/me"))["error"]["code"] == code
+
+
 _URL_RE = re.compile(r"https://\S+")
 
 
