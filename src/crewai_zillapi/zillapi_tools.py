@@ -189,10 +189,10 @@ def _request(
         )
 
     # Every successful Zillapi response wraps the payload as {"data": ...} with
-    # request_id, and sometimes meta / cached / fetched_at. Lift the payload so an
-    # agent reads result["data"] directly instead of result["data"]["data"], and
-    # keep the useful siblings at the top level. `cached` is worth surfacing: a
-    # cache hit is billed at 0 credits.
+    # request_id, and sometimes meta. Lift the payload so an agent reads
+    # result["data"] directly instead of result["data"]["data"], and keep the
+    # useful siblings at the top level. Any sibling the API does not send is
+    # simply absent from the envelope.
     envelope: dict = {"success": True}
     if isinstance(data, dict) and "data" in data:
         envelope["data"] = data["data"]
