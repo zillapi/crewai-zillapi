@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "crewai-zillapi"
+version = "0.1.0"
+description = "CrewAI tools for Zillapi: look up Zillow property data, valuations, schools and listings from CrewAI agents."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "Zero Point Studio", email = "hello@zillapi.com" }]
+keywords = [
+  "crewai",
+  "crewai-tools",
+  "zillapi",
+  "zillow",
+  "real-estate",
+  "property-data",
+  "zestimate",
+  "mls",
+  "ai-agent",
+  "llm",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = ["crewai>=0.80.0", "requests>=2.31.0", "pydantic>=2.0.0"]
+
+[project.urls]
+Homepage = "https://zillapi.com"
+Documentation = "https://zillapi.com/docs"
+Repository = "https://github.com/ZeroPointRepo/crewai-zillapi"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/crewai_zillapi"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md", "LICENSE", "pyproject.toml"]
+# Explicit, so the sdist stays clean even when no VCS ignore file applies.
+exclude = ["**/.venv", "**/.venv-*", "**/__pycache__", "**/*.pyc", "dist"]
