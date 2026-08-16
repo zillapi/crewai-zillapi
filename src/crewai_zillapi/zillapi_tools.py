@@ -31,7 +31,7 @@ except ImportError:  # pragma: no cover - exercised only without crewai installe
     EnvVar = None  # type: ignore[assignment,misc]
 
 BASE_URL = "https://api.zillapi.com"
-USER_AGENT = "crewai-zillapi/0.1.0 (+https://github.com/ZeroPointRepo/crewai-zillapi)"
+USER_AGENT = "crewai-zillapi/0.1.1 (+https://github.com/zillapi/crewai-zillapi)"
 TIMEOUT_SECONDS = 90
 
 _ENV_KEY = "ZILLAPI_KEY"

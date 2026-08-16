@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "crewai-zillapi"
-version = "0.1.0"
+version = "0.1.1"
 description = "CrewAI tools for Zillapi: look up Zillow property data, valuations, schools and listings from CrewAI agents."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -37,7 +37,7 @@ dependencies = ["crewai>=0.80.0", "requests>=2.31.0", "pydantic>=2.0.0"]
 [project.urls]
 Homepage = "https://zillapi.com"
 Documentation = "https://zillapi.com/docs"
-Repository = "https://github.com/ZeroPointRepo/crewai-zillapi"
+Repository = "https://github.com/zillapi/crewai-zillapi"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/crewai_zillapi"]
