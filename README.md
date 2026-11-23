@@ -69,7 +69,7 @@ print(result["data"]["zpid"])
 | `ZillapiJobTool` | Poll an async job and read its results | 0, free |
 | `ZillapiAccountTool` | Plan, remaining credit balance, recent usage | 0, free |
 
-Failed calls are never charged.
+A lookup or search with no match costs 1 credit; other failed calls are free.
 
 `ZillapiPropertyDetailTool` sections: `zestimate`, `price-history`, `tax-history`, `schools`,
 `photos`, `agent`, `nearby`, `open-houses`, `facts`.

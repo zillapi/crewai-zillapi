@@ -419,8 +419,8 @@ if BaseTool is not None:
             "beds, baths, living area, year built, Zestimate, description, photos "
             "and the zpid. Use when the task names a property by address and you "
             "need its data or its zpid. Needs street, city, state and ZIP. "
-            "Costs 3 credits per successful call because the address is resolved "
-            "upstream. Failed calls are free."
+            "Costs 3 credits per matched address (1 if none) as it is resolved "
+            "upstream. Other failed calls are free."
         )
         args_schema: Type[BaseModel] = ZillapiPropertyByAddressToolSchema
 
@@ -445,7 +445,7 @@ if BaseTool is not None:
             "beds, baths, living area, lot size, year built, Zestimate, status, "
             "address and description. Use when you already have a zpid, for "
             "example from a search or an address lookup. Costs 1 credit per "
-            "successful call. Failed calls are free."
+            "lookup, even with no match. Other failures are free."
         )
         args_schema: Type[BaseModel] = ZillapiPropertyByZpidToolSchema
 
@@ -469,7 +469,7 @@ if BaseTool is not None:
             "'nearby' (comparable homes), 'open-houses', and 'facts' (the full "
             "MLS attribute set). Use when the task needs one dimension of a "
             "property, such as valuation, school quality or sale history. Costs "
-            "1 credit per successful call. Failed calls are free."
+            "1 credit per lookup, even with no match. Other failures are free."
         )
         args_schema: Type[BaseModel] = ZillapiPropertyDetailToolSchema
 
@@ -487,7 +487,7 @@ if BaseTool is not None:
             "building pages, where it can return every unit in the building. Use "
             "when the task supplies a Zillow link rather than an address or a "
             "zpid. Costs 1 credit per record returned, so a building URL that "
-            "returns many units costs 1 credit per unit. Failed calls are free."
+            "returns many units costs 1 credit per unit. No match costs 1."
         )
         args_schema: Type[BaseModel] = ZillapiPropertyByUrlToolSchema
 
@@ -516,7 +516,7 @@ if BaseTool is not None:
             "accepted, so convert the place to coordinates first. Use when the "
             "task asks what is on the market in an area rather than about one "
             "known property. Costs 1 credit per listing returned, so keep "
-            "max_items tight. Failed calls are free. Requests above 50 listings "
+            "max_items tight. An empty search costs 1. Requests above 50 listings "
             "run asynchronously and return a job_id to poll with the Zillapi Job "
             "tool."
         )
